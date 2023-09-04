@@ -23,8 +23,20 @@
 		// Return the vector of detected objects
 		return objects;
 	}
-	 
+
+
+	void crop(cv::Mat img, Point lcorn,Point rcorn){
+		//cv::Rect myROI(lcorn.y,lcorn.x,rcorn.y,rcorn.x);
+		cv::Mat cropped_image = img(cv::Rect(lcorn.x,lcorn.y,rcorn.x-lcorn.x,rcorn.y-lcorn.y));
+		//cv::Mat cropped_image = img(cv::Range(lcorn.y,lcorn.x),cv::Range(rcorn.y,rcorn.x));
+	 	namedWindow("Cropped image", WINDOW_AUTOSIZE);
+		imshow("Cropped Image", cropped_image);
+		} 
+
+
+		
 	int main(int argc, char** argv) {
+
 		// Read the image
 		cv::Mat image = cv::imread(argv[1]);
 		
@@ -43,18 +55,18 @@
 		//draw a rectangle on  any recognized object
 		 for ( size_t i = 0; i < objects.size(); i++ )
  		{
-	 //	Point center( objects[i].x + objects[i].width/2, objects[i].y + objects[i].height/2 );
- 	//	ellipse( image, center, Size( objects[i].width/2, objects[i].height/2 ), 0, 0, 360, Scalar( 255, 0, 255 ), 4 );
-		
-		//Drawing a rectangle over the detected object
+	
 		Point leftcorn(objects[i].x, objects[i].y);
 		Point rightcorn(objects[i].x+objects[i].width, objects[i].y+objects[i].height);
-
 		rectangle(image, leftcorn, rightcorn,Scalar(255, 0, 0),3, LINE_8);
+		crop(image,leftcorn,rightcorn);
+		
 		}
-		//output image with circle over the detected object
+		
 		namedWindow("Detected-plates", WINDOW_AUTOSIZE);
 		imshow("Detected-plates",image);
+		
+ 
 		waitKey(0);
 		return 0;
 	}
